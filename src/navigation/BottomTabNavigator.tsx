@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
+import { useTheme } from '../context/ThemeContext';
 
 // Import Screens
 import CompanyScreen from '../screens/company/CompanyScreen';
@@ -8,8 +9,9 @@ import Dashboard from '../screens/Dashboard';
 import SettingScreen from '../screens/SettingScreen';
 import SubscriptionScreen from '../screens/subscription/SubscriptionScreen';
 const Tab = createBottomTabNavigator();
-
 const BottomTabNavigator = () => {
+  const { theme } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -29,15 +31,15 @@ const BottomTabNavigator = () => {
 
           return <Feather name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#4F46E5',
-        tabBarInactiveTintColor: '#9A9EA7',
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.textSecondary,
         tabBarStyle: {
           height: 65,
           paddingBottom: 10,
           paddingTop: 10,
-          backgroundColor: '#FFFFFF',
+          backgroundColor: theme.card,
           borderTopWidth: 1,
-          borderTopColor: '#F0F0F0',
+          borderTopColor: theme.border,
           elevation: 8,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: -2 },

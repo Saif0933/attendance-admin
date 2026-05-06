@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuthStore } from '../store/useAuthStore';
+import { useTheme } from '../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
@@ -55,6 +56,8 @@ const ProfileScreen = () => {
     ]).start();
   }, []);
 
+  const { theme, toggleTheme, isDarkMode } = useTheme();
+
   const handleLogout = () => {
     Alert.alert(
       'Sign Out',
@@ -74,19 +77,18 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4338CA" />
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle="light-content" backgroundColor={isDarkMode ? '#121212' : '#4338CA'} />
       
       {/* Dynamic Corporate Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: isDarkMode ? '#1E1E1E' : '#4338CA' }]}>
         <View style={styles.headerCircle1} />
         <View style={styles.headerCircle2} />
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Account</Text>
-            <TouchableOpacity style={styles.headerAction}>
-              <Ionicons name="notifications-outline" size={22} color="#FFF" />
-              <View style={styles.notificationDot} />
+            <Text style={[styles.headerTitle, { color: '#FFF' }]}>Account</Text>
+            <TouchableOpacity style={styles.headerAction} onPress={toggleTheme}>
+              <Ionicons name={isDarkMode ? "sunny-outline" : "moon-outline"} size={22} color="#FFF" />
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -99,68 +101,68 @@ const ProfileScreen = () => {
         ]}
       >
         {/* Profile Identity Card */}
-        <View style={styles.profileCard}>
+        <View style={[styles.profileCard, { backgroundColor: theme.card }]}>
           <View style={styles.avatarContainer}>
-            <View style={styles.avatarGradient}>
-              <View style={styles.avatarBox}>
-                <Text style={styles.avatarText}>A</Text>
+            <View style={[styles.avatarGradient, { backgroundColor: isDarkMode ? '#333' : '#EEF2FF' }]}>
+              <View style={[styles.avatarBox, { backgroundColor: theme.card }]}>
+                <Text style={[styles.avatarText, { color: isDarkMode ? theme.text : '#4F46E5' }]}>A</Text>
               </View>
             </View>
-            <View style={styles.activeStatus} />
+            <View style={[styles.activeStatus, { borderColor: theme.card }]} />
           </View>
           
-          <Text style={styles.userName}>Admin User</Text>
-          <View style={styles.roleBadge}>
-            <MaterialIcons name="verified-user" size={14} color="#6366F1" />
-            <Text style={styles.userRole}>Master Administrator</Text>
+          <Text style={[styles.userName, { color: theme.text }]}>Admin User</Text>
+          <View style={[styles.roleBadge, { backgroundColor: isDarkMode ? '#333' : '#F5F7FF' }]}>
+            <MaterialIcons name="verified-user" size={14} color={isDarkMode ? theme.primary : "#6366F1"} />
+            <Text style={[styles.userRole, { color: isDarkMode ? theme.text : "#6366F1" }]}>Master Administrator</Text>
           </View>
 
           {/* Quick Metrics Bar */}
-          <View style={styles.metricsBar}>
+          <View style={[styles.metricsBar, { borderTopColor: theme.border }]}>
             <View style={styles.metricItem}>
-              <Text style={styles.metricVal}>Active</Text>
-              <Text style={styles.metricLabel}>Status</Text>
+              <Text style={[styles.metricVal, { color: theme.text }]}>Active</Text>
+              <Text style={[styles.metricLabel, { color: theme.textSecondary }]}>Status</Text>
             </View>
-            <View style={[styles.metricItem, styles.metricBorder]}>
-              <Text style={styles.metricVal}>Full</Text>
-              <Text style={styles.metricLabel}>Access</Text>
+            <View style={[styles.metricItem, styles.metricBorder, { borderLeftColor: theme.border, borderRightColor: theme.border }]}>
+              <Text style={[styles.metricVal, { color: theme.text }]}>Full</Text>
+              <Text style={[styles.metricLabel, { color: theme.textSecondary }]}>Access</Text>
             </View>
             <View style={styles.metricItem}>
-              <Text style={styles.metricVal}>v1.0.2</Text>
-              <Text style={styles.metricLabel}>Build</Text>
+              <Text style={[styles.metricVal, { color: theme.text }]}>v1.0.2</Text>
+              <Text style={[styles.metricLabel, { color: theme.textSecondary }]}>Build</Text>
             </View>
           </View>
         </View>
 
         {/* Action Controls Section */}
         <View style={styles.sectionDivider}>
-          <Text style={styles.sectionTitle}>Security & Access</Text>
+          <Text style={[styles.sectionTitle, { color: theme.textSecondary }]}>Security & Access</Text>
         </View>
 
-        <View style={styles.actionCard}>
+        <View style={[styles.actionCard, { backgroundColor: theme.card }]}>
           <TouchableOpacity 
             style={styles.actionRow} 
             activeOpacity={0.7}
             onPress={handleLogout}
           >
-            <View style={styles.iconContainer}>
+            <View style={[styles.iconContainer, { backgroundColor: '#FEF2F2' }]}>
               <Ionicons name="log-out-outline" size={22} color="#EF4444" />
             </View>
             <View style={styles.actionLabelContent}>
-              <Text style={styles.actionMainTitle}>Sign Out</Text>
-              <Text style={styles.actionSubTitle}>Securely end persistent session</Text>
+              <Text style={[styles.actionMainTitle, { color: theme.text }]}>Sign Out</Text>
+              <Text style={[styles.actionSubTitle, { color: theme.textSecondary }]}>Securely end persistent session</Text>
             </View>
-            <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
+            <Ionicons name="chevron-forward" size={18} color={theme.border} />
           </TouchableOpacity>
         </View>
 
         {/* Brand Presence Footer */}
         <View style={styles.footer}>
           <View style={styles.brandRow}>
-            <View style={styles.brandMark} />
-            <Text style={styles.brandName}>SYMBOSYS</Text>
+            <View style={[styles.brandMark, { backgroundColor: isDarkMode ? theme.primary : '#4338CA' }]} />
+            <Text style={[styles.brandName, { color: theme.text }]}>SYMBOSYS</Text>
           </View>
-          <Text style={styles.legalLabel}>Corporate Security Standards Certified</Text>
+          <Text style={[styles.legalLabel, { color: theme.textSecondary }]}>Corporate Security Standards Certified</Text>
         </View>
       </Animated.View>
     </View>

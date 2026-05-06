@@ -18,6 +18,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAdminLogin } from '../api/hook/useAdmin';
 import { useAuthStore } from '../store/useAuthStore';
+import { useTheme } from '../context/ThemeContext';
 
 // Define the navigation param list locally or import it
 type RootStackParamList = {
@@ -69,9 +70,11 @@ const EmployeeLoginScreen = () => {
     );
   };
 
+  const { theme, isDarkMode } = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FB" />
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
       
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -84,21 +87,21 @@ const EmployeeLoginScreen = () => {
           
           {/* Branding Section */}
           <View style={styles.brandSection}>
-            <Text style={styles.brandTitle}>Admin Panel</Text>
-            <Text style={styles.brandSubtitle}>
+            <Text style={[styles.brandTitle, { color: theme.text }]}>Admin Panel</Text>
+            <Text style={[styles.brandSubtitle, { color: theme.textSecondary }]}>
               Sign in to manage your attendance system
             </Text>
           </View>
 
           {/* Input Section */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email Address</Text>
-            <View style={[styles.inputWrapper, error && !email ? styles.inputError : null]}>
-              <Ionicons name="mail-outline" size={20} color="#2FAED7" style={styles.inputIconPrefix} />
+            <Text style={[styles.label, { color: theme.text }]}>Email Address</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: theme.card, borderColor: theme.border }, error && !email ? styles.inputError : null]}>
+              <Ionicons name="mail-outline" size={20} color={theme.primary} style={styles.inputIconPrefix} />
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { color: theme.text }]}
                 placeholder="admin@example.com"
-                placeholderTextColor="#A0AEC0"
+                placeholderTextColor={theme.textSecondary}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={email}
@@ -110,13 +113,13 @@ const EmployeeLoginScreen = () => {
               />
             </View>
 
-            <Text style={[styles.label, { marginTop: 20 }]}>Password</Text>
-            <View style={[styles.inputWrapper, error && !password ? styles.inputError : null]}>
-              <Ionicons name="lock-closed-outline" size={20} color="#2FAED7" style={styles.inputIconPrefix} />
+            <Text style={[styles.label, { marginTop: 20, color: theme.text }]}>Password</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: theme.card, borderColor: theme.border }, error && !password ? styles.inputError : null]}>
+              <Ionicons name="lock-closed-outline" size={20} color={theme.primary} style={styles.inputIconPrefix} />
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { color: theme.text }]}
                 placeholder="••••••••"
-                placeholderTextColor="#A0AEC0"
+                placeholderTextColor={theme.textSecondary}
                 secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={(text) => {
@@ -132,7 +135,7 @@ const EmployeeLoginScreen = () => {
                 <Ionicons 
                   name={showPassword ? "eye-off-outline" : "eye-outline"} 
                   size={20} 
-                  color="#A0AEC0" 
+                  color={theme.textSecondary} 
                 />
               </TouchableOpacity>
             </View>
@@ -141,7 +144,7 @@ const EmployeeLoginScreen = () => {
 
           {/* Sign In Button */}
           <TouchableOpacity 
-            style={[styles.signInButton, loginMutation.isPending && styles.signInButtonDisabled]} 
+            style={[styles.signInButton, { backgroundColor: theme.primary }, loginMutation.isPending && styles.signInButtonDisabled]} 
             activeOpacity={0.8}
             onPress={handleSignIn}
             disabled={loginMutation.isPending}
@@ -156,7 +159,7 @@ const EmployeeLoginScreen = () => {
           {/* Footer */}
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => Alert.alert('Support', 'Please contact system admin for credentials.')}>
-              <Text style={styles.linkText}>Forgot Password?</Text>
+              <Text style={[styles.linkText, { color: theme.primary }]}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 

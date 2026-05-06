@@ -18,19 +18,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useGetInfiniteCompanies } from '../../api/hook/useAdmin';
 import { useDebounce } from '../../api/hook/useDebounce';
+import { useTheme } from '../../context/ThemeContext';
 
 import { Company } from '../../types/admin.type';
 
 
 // --- Constants ---
 const COLORS = {
-  primary: '#5A4FF3',
-  background: '#F8F9FD',
+  background: '#F8F9FB',
   cardBg: '#FFFFFF',
-  textDark: '#1A1A1A',
-  textGray: '#6E727D',
+  textDark: '#1A1D1E',
+  textGray: '#6B7280',
+  primary: '#5A4FF3',
+  success: '#10B981',
   inputBg: '#EFF1F5',
-  iconGray: '#9A9EA7',
 };
 
 
@@ -48,28 +49,32 @@ const hexToRgba = (hex: string, opacity: number) => {
 
 // --- Child Components ---
 
-const Header = () => (
-  <View style={styles.header}>
-    <View style={styles.headerIconContainer}>
-      <FontAwesome5 name="briefcase" size={20} color={COLORS.primary} />
+const Header = () => {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.header}>
+      <View style={[styles.headerIconContainer, { backgroundColor: theme.isDark ? '#333' : '#EBEBFF' }]}>
+        <FontAwesome5 name="briefcase" size={20} color={COLORS.primary} />
+      </View>
+      <View style={styles.headerTextContainer}>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Company Directory</Text>
+        <Text style={[styles.headerSubtitle, { color: theme.textSecondary }]}>ADMINISTRATION PANEL</Text>
+      </View>
+      <TouchableOpacity>
+        <Ionicons name="ellipsis-vertical" size={24} color={theme.text} />
+      </TouchableOpacity>
     </View>
-    <View style={styles.headerTextContainer}>
-      <Text style={styles.headerTitle}>Company Directory</Text>
-      <Text style={styles.headerSubtitle}>ADMINISTRATION PANEL</Text>
-    </View>
-    <TouchableOpacity>
-      <Ionicons name="ellipsis-vertical" size={24} color={COLORS.textDark} />
-    </TouchableOpacity>
-  </View>
-);
+  );
+};
 
 const CompanyCard = ({ item }: { item: Company }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { theme } = useTheme();
   const themeColor = COLORS.primary;
-  const lightThemeColor = hexToRgba(themeColor, 0.1);
+  const lightThemeColor = hexToRgba(themeColor, 0.15);
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: theme.card }]}>
       <View style={styles.cardHeader}>
         <View style={[styles.cardIconContainer, { backgroundColor: lightThemeColor }]}>
           <MaterialCommunityIcons name="office-building" size={24} color={themeColor} />
@@ -81,15 +86,15 @@ const CompanyCard = ({ item }: { item: Company }) => {
         </View>
       </View>
 
-      <Text style={styles.cardTitle}>{item.name}</Text>
-      <Text style={styles.cardDescription} numberOfLines={2}>
+      <Text style={[styles.cardTitle, { color: theme.text }]}>{item.name}</Text>
+      <Text style={[styles.cardDescription, { color: theme.textSecondary }]} numberOfLines={2}>
         {item.address || 'No address provided.'}
       </Text>
 
       <View style={styles.cardFooter}>
         <View style={styles.infoRow}>
-          <Ionicons name="mail-outline" size={14} color={COLORS.textGray} />
-          <Text style={styles.footerText}>{item.email || 'N/A'}</Text>
+          <Ionicons name="mail-outline" size={14} color={theme.textSecondary} />
+          <Text style={[styles.footerText, { color: theme.textSecondary }]}>{item.email || 'N/A'}</Text>
         </View>
 
         <TouchableOpacity 
@@ -112,8 +117,8 @@ const CompanyCard = ({ item }: { item: Company }) => {
             });
           }}
         >
-          <Text style={styles.viewButtonText}>Details</Text>
-          <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
+          <Text style={[styles.viewButtonText, { color: themeColor }]}>Details</Text>
+          <Ionicons name="chevron-forward" size={16} color={themeColor} />
         </TouchableOpacity>
       </View>
     </View>
@@ -156,10 +161,12 @@ const CompanyScreen = () => {
   };
 
 
+  const { theme, isDarkMode } = useTheme();
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
         <FlatList
           data={companies}
           keyExtractor={(item) => item.id}
@@ -169,12 +176,12 @@ const CompanyScreen = () => {
           ListHeaderComponent={
             <>
               <Header />
-              <View style={styles.searchBar}>
-                <Ionicons name="search" size={20} color={COLORS.iconGray} style={styles.searchIcon} />
+              <View style={[styles.searchBar, { backgroundColor: theme.isDark ? '#333' : '#EFF1F5' }]}>
+                <Ionicons name="search" size={20} color={theme.textSecondary} style={styles.searchIcon} />
                 <TextInput
                   placeholder="Search by company name..."
-                  placeholderTextColor={COLORS.textGray}
-                  style={styles.searchInput}
+                  placeholderTextColor={theme.textSecondary}
+                  style={[styles.searchInput, { color: theme.text }]}
                   value={search}
                   onChangeText={setSearch}
                 />
@@ -195,8 +202,8 @@ const CompanyScreen = () => {
           ListEmptyComponent={
             !isLoading ? (
               <View style={styles.emptyContainer}>
-                <Ionicons name="business-outline" size={60} color={COLORS.iconGray} />
-                <Text style={styles.emptyText}>No companies found</Text>
+                <Ionicons name="business-outline" size={60} color={theme.textSecondary} />
+                <Text style={[styles.emptyText, { color: theme.textSecondary }]}>No companies found</Text>
               </View>
             ) : null
           }

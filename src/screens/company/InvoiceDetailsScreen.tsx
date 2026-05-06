@@ -12,23 +12,21 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 // --- Colors ---
 const COLORS = {
-  background: '#FFFFFF', // Clean white background
   white: '#FFFFFF',
-  surface: '#F8FAFC',    // Subtle surface color
-  primary: '#4F46E5',    // Indigo
-  primaryLight: '#EEF2FF',
-  textDark: '#0F172A',   // Slate 900
-  textGray: '#64748B',   // Slate 500
-  success: '#10B981',    // Emerald 500
-  warning: '#F59E0B',
+  primary: '#4F46E5',
+  success: '#10B981',
   danger: '#EF4444',
-  border: '#F1F5F9',     // Slate 100
-  secondary: '#1E293B',  // Slate 800
+  background: '#FFFFFF',
+  textDark: '#1A1D1E',
+  textGray: '#6B7280',
+  surface: '#F8FAFC',
+  border: '#E5E7EB',
 };
 
 // --- Types ---
@@ -53,24 +51,27 @@ const InvoiceDetailsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute<InvoiceDetailsRouteProp>();
   const { subscription } = route.params;
+  const { theme, isDarkMode } = useTheme();
 
   const isExpired = subscription.status === 'Expired' || subscription.id === '4';
 
-  const InfoRow = ({ label, value, icon }: { label: string; value: string; icon: string }) => (
-    <View style={styles.infoRow}>
-      <View style={styles.infoIconWrapper}>
-        <Feather name={icon} size={16} color={COLORS.textGray} />
+  const InfoRow = ({ label, value, icon }: { label: string; value: string; icon: string }) => {
+    return (
+      <View style={styles.infoRow}>
+        <View style={styles.infoIconWrapper}>
+          <Feather name={icon} size={16} color={theme.textSecondary} />
+        </View>
+        <View style={styles.infoTextWrapper}>
+          <Text style={[styles.infoLabel, { color: theme.textSecondary }]}>{label}</Text>
+          <Text style={[styles.infoValue, { color: theme.text }]}>{value}</Text>
+        </View>
       </View>
-      <View style={styles.infoTextWrapper}>
-        <Text style={styles.infoLabel}>{label}</Text>
-        <Text style={styles.infoValue}>{value}</Text>
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
       
       {/* Header Navigation */}
       <View style={styles.navBar}>
@@ -78,11 +79,11 @@ const InvoiceDetailsScreen = () => {
           onPress={() => navigation.goBack()}
           style={styles.navButton}
         >
-          <Ionicons name="close" size={26} color={COLORS.textDark} />
+          <Ionicons name="close" size={26} color={theme.text} />
         </TouchableOpacity>
-        <Text style={styles.navTitle}>Subscription Invoice</Text>
+        <Text style={[styles.navTitle, { color: theme.text }]}>Subscription Invoice</Text>
         <TouchableOpacity style={styles.navButton}>
-          <Feather name="share" size={20} color={COLORS.textDark} />
+          <Feather name="share" size={20} color={theme.text} />
         </TouchableOpacity>
       </View>
 
@@ -90,23 +91,23 @@ const InvoiceDetailsScreen = () => {
         
         {/* Hero Section: Status & Amount */}
         <View style={styles.heroSection}>
-          <View style={[styles.statusTag, { backgroundColor: isExpired ? COLORS.danger + '10' : COLORS.success + '10' }]}>
+          <View style={[styles.statusTag, { backgroundColor: isExpired ? COLORS.danger + '20' : COLORS.success + '20' }]}>
             <View style={[styles.statusDot, { backgroundColor: isExpired ? COLORS.danger : COLORS.success }]} />
             <Text style={[styles.statusTagText, { color: isExpired ? COLORS.danger : COLORS.success }]}>
               {isExpired ? 'Payment Expired' : 'Payment Successful'}
             </Text>
           </View>
 
-          <Text style={styles.heroAmount}>{subscription.amount}</Text>
-          <Text style={styles.heroDate}>Paid on {subscription.purchaseDate}</Text>
+          <Text style={[styles.heroAmount, { color: theme.text }]}>{subscription.amount}</Text>
+          <Text style={[styles.heroDate, { color: theme.textSecondary }]}>Paid on {subscription.purchaseDate}</Text>
           
-          <View style={styles.transactionChip}>
-            <Text style={styles.transactionChipText}>TXN: {subscription.transactionId}</Text>
+          <View style={[styles.transactionChip, { backgroundColor: isDarkMode ? '#333' : '#F8FAFC' }]}>
+            <Text style={[styles.transactionChipText, { color: theme.text }]}>TXN: {subscription.transactionId}</Text>
           </View>
         </View>
 
         {/* Separator */}
-        <View style={styles.fullDivider} />
+        <View style={[styles.fullDivider, { backgroundColor: isDarkMode ? '#1A1A1A' : '#F8FAFC' }]} />
 
         {/* Main Details Section */}
         <View style={styles.detailsContainer}>
@@ -114,28 +115,28 @@ const InvoiceDetailsScreen = () => {
           {/* Billed From & To */}
           <View style={styles.entryRow}>
             <View style={styles.entryColumn}>
-              <Text style={styles.entryLabel}>Billed From</Text>
-              <Text style={styles.entryValueMain}>Symbosys Attendence</Text>
-              <Text style={styles.entrySubText}>Official Product Suite</Text>
+              <Text style={[styles.entryLabel, { color: theme.textSecondary }]}>Billed From</Text>
+              <Text style={[styles.entryValueMain, { color: theme.text }]}>Symbosys Attendence</Text>
+              <Text style={[styles.entrySubText, { color: theme.textSecondary }]}>Official Product Suite</Text>
             </View>
             <View style={[styles.entryColumn, { alignItems: 'flex-end' }]}>
-              <Text style={styles.entryLabel}>Billed To</Text>
-              <Text style={styles.entryValueMain}>{subscription.companyName}</Text>
-              <Text style={styles.entrySubText}>ID: #SYM-{subscription.id}024</Text>
+              <Text style={[styles.entryLabel, { color: theme.textSecondary }]}>Billed To</Text>
+              <Text style={[styles.entryValueMain, { color: theme.text }]}>{subscription.companyName}</Text>
+              <Text style={[styles.entrySubText, { color: theme.textSecondary }]}>ID: #SYM-{subscription.id}024</Text>
             </View>
           </View>
 
           {/* Plan Summary */}
-          <View style={styles.planSection}>
-            <View style={styles.planIconBox}>
+          <View style={[styles.planSection, { backgroundColor: isDarkMode ? '#333' : '#F8FAFC' }]}>
+            <View style={[styles.planIconBox, { backgroundColor: theme.card }]}>
               <Feather name="package" size={20} color={COLORS.primary} />
             </View>
             <View style={styles.planTextContent}>
-              <Text style={styles.planName}>Premium Enterprise Plan</Text>
-              <Text style={styles.planDuration}>Annual Subscription • Full Access</Text>
+              <Text style={[styles.planName, { color: theme.text }]}>Premium Enterprise Plan</Text>
+              <Text style={[styles.planDuration, { color: theme.textSecondary }]}>Annual Subscription • Full Access</Text>
             </View>
             <View style={styles.planPriceBox}>
-               <Text style={styles.planPriceText}>{subscription.amount}</Text>
+               <Text style={[styles.planPriceText, { color: COLORS.primary }]}>{subscription.amount}</Text>
             </View>
           </View>
 
@@ -148,30 +149,30 @@ const InvoiceDetailsScreen = () => {
           </View>
 
           {/* Pricing Table */}
-          <View style={styles.priceTable}>
+          <View style={[styles.priceTable, { backgroundColor: isDarkMode ? '#333' : '#F8FAFC' }]}>
              <View style={styles.priceRow}>
-                <Text style={styles.priceLabel}>Base Amount</Text>
-                <Text style={styles.priceValue}>{subscription.amount}</Text>
+                <Text style={[styles.priceLabel, { color: theme.textSecondary }]}>Base Amount</Text>
+                <Text style={[styles.priceValue, { color: theme.text }]}>{subscription.amount}</Text>
              </View>
              <View style={styles.priceRow}>
-                <Text style={styles.priceLabel}>Discount</Text>
+                <Text style={[styles.priceLabel, { color: theme.textSecondary }]}>Discount</Text>
                 <Text style={[styles.priceValue, { color: COLORS.success }]}>-₹0.00</Text>
              </View>
              <View style={styles.priceRow}>
-                <Text style={styles.priceLabel}>Taxes (18% GST)</Text>
-                <Text style={styles.priceValue}>Included</Text>
+                <Text style={[styles.priceLabel, { color: theme.textSecondary }]}>Taxes (18% GST)</Text>
+                <Text style={[styles.priceValue, { color: theme.text }]}>Included</Text>
              </View>
-             <View style={styles.totalDivider} />
+             <View style={[styles.totalDivider, { backgroundColor: theme.border }]} />
              <View style={styles.priceRow}>
-                <Text style={styles.totalLabelText}>Total Paid</Text>
-                <Text style={styles.totalValueText}>{subscription.amount}</Text>
+                <Text style={[styles.totalLabelText, { color: theme.text }]}>Total Paid</Text>
+                <Text style={[styles.totalValueText, { color: theme.text }]}>{subscription.amount}</Text>
              </View>
           </View>
 
           {/* Note */}
           <View style={styles.noteSection}>
-             <Feather name="info" size={14} color={COLORS.textGray} />
-             <Text style={styles.noteText}>
+             <Feather name="info" size={14} color={theme.textSecondary} />
+             <Text style={[styles.noteText, { color: theme.textSecondary }]}>
                This is a computer-generated invoice and doesn't require a physical signature.
              </Text>
           </View>
@@ -180,14 +181,14 @@ const InvoiceDetailsScreen = () => {
 
         {/* Action Buttons */}
         <View style={styles.footer}>
-           <TouchableOpacity style={styles.primaryButton}>
+           <TouchableOpacity style={[styles.primaryButton, { backgroundColor: isDarkMode ? theme.primary : '#0F172A' }]}>
               <Feather name="download" size={20} color={COLORS.white} />
               <Text style={styles.primaryButtonText}>Download Invoice</Text>
            </TouchableOpacity>
            
-           <TouchableOpacity style={styles.secondaryButton}>
-              <Feather name="mail" size={18} color={COLORS.textDark} />
-              <Text style={styles.secondaryButtonText}>Email Copy</Text>
+           <TouchableOpacity style={[styles.secondaryButton, { borderColor: theme.border, backgroundColor: theme.card }]}>
+              <Feather name="mail" size={18} color={theme.text} />
+              <Text style={[styles.secondaryButtonText, { color: theme.text }]}>Email Copy</Text>
            </TouchableOpacity>
         </View>
 

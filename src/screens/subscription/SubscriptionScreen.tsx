@@ -25,6 +25,7 @@ import {
   useUpdateSubscriptionPlan
 } from '../../api/hook/useSubscriptionPlan';
 import { SubscriptionPlan } from '../../types/admin.type';
+import { useTheme } from '../../context/ThemeContext';
 
 // --- Constants & Colors ---
 const COLORS = {
@@ -47,17 +48,20 @@ const getStatusColor = (isActive: boolean) => {
 
 // --- Components ---
 
-const Header = ({ onAdd }: { onAdd: () => void }) => (
-  <View style={styles.header}>
-    <View>
-      <Text style={styles.headerTitle}>Plans</Text>
-      <Text style={styles.headerSubtitle}>Manage subscription models</Text>
+const Header = ({ onAdd }: { onAdd: () => void }) => {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.header}>
+      <View>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Plans</Text>
+        <Text style={[styles.headerSubtitle, { color: theme.textSecondary }]}>Manage subscription models</Text>
+      </View>
+      <TouchableOpacity style={[styles.filterButton, { backgroundColor: theme.card, borderColor: theme.border }]} onPress={onAdd}>
+        <Ionicons name="add-circle-outline" size={24} color={COLORS.primary} />
+      </TouchableOpacity>
     </View>
-    <TouchableOpacity style={styles.filterButton} onPress={onAdd}>
-      <Ionicons name="add-circle-outline" size={24} color={COLORS.primary} />
-    </TouchableOpacity>
-  </View>
-);
+  );
+};
 
 const SubscriptionCard = ({ 
   item, 
@@ -67,17 +71,18 @@ const SubscriptionCard = ({
   onEdit: (plan: SubscriptionPlan) => void 
 }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const statusColor = getStatusColor(item.isActive);
+  const { theme } = useTheme();
+  const statusColor = item.isActive ? COLORS.success : COLORS.danger;
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
       {/* Top Section: Plan Name & Status */}
       <View style={styles.cardHeader}>
         <View style={styles.companyInfo}>
           <View style={[styles.iconBox, { backgroundColor: COLORS.primary + '15' }]}>
             <Feather name="package" size={18} color={COLORS.primary} />
           </View>
-          <Text style={styles.companyName} numberOfLines={1}>{item.name}</Text>
+          <Text style={[styles.companyName, { color: theme.text }]} numberOfLines={1}>{item.name}</Text>
         </View>
         <View style={[styles.statusBadge, { backgroundColor: statusColor + '15' }]}>
           <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
@@ -87,38 +92,38 @@ const SubscriptionCard = ({
 
       {/* Plan Specifics Section */}
       <View style={styles.expirySection}>
-         <Text style={styles.cardSubtitle}>{item.description || 'No description provided'}</Text>
+         <Text style={[styles.cardSubtitle, { color: theme.textSecondary }]}>{item.description || 'No description provided'}</Text>
       </View>
 
       {/* Details Grid */}
       <View style={styles.detailsGrid}>
         <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Price</Text>
+          <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Price</Text>
           <Text style={[styles.detailValue, {color: COLORS.primary}]}>₹{item.price.toLocaleString()}</Text>
         </View>
         <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Employee Limit</Text>
-          <Text style={styles.detailValue}>{item.employeeLimit} Employees</Text>
+          <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Employee Limit</Text>
+          <Text style={[styles.detailValue, { color: theme.text }]}>{item.employeeLimit} Employees</Text>
         </View>
       </View>
 
       <View style={styles.detailsGrid}>
         <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Duration</Text>
-          <Text style={styles.detailValue}>{item.durationDays} Days</Text>
+          <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Duration</Text>
+          <Text style={[styles.detailValue, { color: theme.text }]}>{item.durationDays} Days</Text>
         </View>
         <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Total Subscriptions</Text>
-          <Text style={styles.detailValue}>0</Text> 
+          <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Total Subscriptions</Text>
+          <Text style={[styles.detailValue, { color: theme.text }]}>0</Text> 
         </View>
       </View>
 
       {/* Footer Action */}
       <TouchableOpacity 
-        style={styles.detailsButton}
+        style={[styles.detailsButton, { borderTopColor: theme.border }]}
         onPress={() => onEdit(item)}
       >
-        <Text style={styles.detailsButtonText}>Edit Plan Details</Text>
+        <Text style={[styles.detailsButtonText, { color: COLORS.primary }]}>Edit Plan Details</Text>
         <Ionicons name="create-outline" size={16} color={COLORS.primary} />
       </TouchableOpacity>
     </View>
@@ -213,25 +218,27 @@ const SubscriptionScreen = () => {
     (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const { theme, isDarkMode } = useTheme();
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
       
       {/* Search Section */}
-      <View style={styles.searchContainer}>
+      <View style={[styles.searchContainer, { backgroundColor: theme.background }]}>
         <Header onAdd={handleAdd} />
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color={COLORS.textGray} />
+        <View style={[styles.searchBar, { backgroundColor: theme.card, borderColor: theme.border }]}>
+          <Ionicons name="search" size={20} color={theme.textSecondary} />
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: theme.text }]}
             placeholder="Search plans..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholderTextColor={COLORS.textGray}
+            placeholderTextColor={theme.textSecondary}
           />
           {searchQuery !== '' && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={18} color={COLORS.textGray} />
+              <Ionicons name="close-circle" size={18} color={theme.textSecondary} />
             </TouchableOpacity>
           )}
         </View>
@@ -248,8 +255,8 @@ const SubscriptionScreen = () => {
         ListEmptyComponent={
           !isFetching ? (
             <View style={styles.emptyContainer}>
-              <Ionicons name="receipt-outline" size={60} color={COLORS.textGray + '50'} />
-              <Text style={styles.emptyText}>No subscription plans found</Text>
+              <Ionicons name="receipt-outline" size={60} color={theme.textSecondary + '50'} />
+              <Text style={[styles.emptyText, { color: theme.textSecondary }]}>No subscription plans found</Text>
             </View>
           ) : null
         }
@@ -265,31 +272,33 @@ const SubscriptionScreen = () => {
         <View style={styles.modalOverlay}>
           <KeyboardAvoidingView 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.modalContainer}
+            style={[styles.modalContainer, { backgroundColor: theme.card }]}
           >
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{editingPlan ? 'Edit Plan' : 'Create New Plan'}</Text>
+            <View style={[styles.modalHeader, { borderBottomColor: theme.border }]}>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{editingPlan ? 'Edit Plan' : 'Create New Plan'}</Text>
               <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-                <Ionicons name="close" size={24} color={COLORS.textDark} />
+                <Ionicons name="close" size={24} color={theme.text} />
               </TouchableOpacity>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.modalForm}>
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Plan Name *</Text>
+                <Text style={[styles.inputLabel, { color: theme.text }]}>Plan Name *</Text>
                 <TextInput
-                  style={styles.modalInput}
+                  style={[styles.modalInput, { backgroundColor: theme.background, borderColor: theme.border, color: theme.text }]}
                   placeholder="e.g. Basic Plan"
+                  placeholderTextColor={theme.textSecondary}
                   value={name}
                   onChangeText={setName}
                 />
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Description</Text>
+                <Text style={[styles.inputLabel, { color: theme.text }]}>Description</Text>
                 <TextInput
-                  style={[styles.modalInput, styles.textArea]}
+                  style={[styles.modalInput, styles.textArea, { backgroundColor: theme.background, borderColor: theme.border, color: theme.text }]}
                   placeholder="Plan details..."
+                  placeholderTextColor={theme.textSecondary}
                   value={description}
                   onChangeText={setDescription}
                   multiline={true}
@@ -299,20 +308,22 @@ const SubscriptionScreen = () => {
 
               <View style={styles.rowInputs}>
                 <View style={[styles.inputGroup, { flex: 1, marginRight: 10 }]}>
-                  <Text style={styles.inputLabel}>Price (₹) *</Text>
+                  <Text style={[styles.inputLabel, { color: theme.text }]}>Price (₹) *</Text>
                   <TextInput
-                    style={styles.modalInput}
+                    style={[styles.modalInput, { backgroundColor: theme.background, borderColor: theme.border, color: theme.text }]}
                     placeholder="4000"
+                    placeholderTextColor={theme.textSecondary}
                     keyboardType="numeric"
                     value={price}
                     onChangeText={setPrice}
                   />
                 </View>
                 <View style={[styles.inputGroup, { flex: 1 }]}>
-                  <Text style={styles.inputLabel}>Days *</Text>
+                  <Text style={[styles.inputLabel, { color: theme.text }]}>Days *</Text>
                   <TextInput
-                    style={styles.modalInput}
+                    style={[styles.modalInput, { backgroundColor: theme.background, borderColor: theme.border, color: theme.text }]}
                     placeholder="30"
+                    placeholderTextColor={theme.textSecondary}
                     keyboardType="numeric"
                     value={durationDays}
                     onChangeText={setDurationDays}
@@ -321,10 +332,11 @@ const SubscriptionScreen = () => {
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Employee Limit *</Text>
+                <Text style={[styles.inputLabel, { color: theme.text }]}>Employee Limit *</Text>
                 <TextInput
-                  style={styles.modalInput}
+                  style={[styles.modalInput, { backgroundColor: theme.background, borderColor: theme.border, color: theme.text }]}
                   placeholder="e.g. 4"
+                  placeholderTextColor={theme.textSecondary}
                   keyboardType="numeric"
                   value={employeeLimit}
                   onChangeText={setEmployeeLimit}
@@ -332,7 +344,7 @@ const SubscriptionScreen = () => {
               </View>
 
               <TouchableOpacity 
-                style={[styles.saveButton, isSaving && styles.saveButtonDisabled]} 
+                style={[styles.saveButton, isSaving && styles.saveButtonDisabled, { backgroundColor: isSaving ? theme.textSecondary : COLORS.primary }]} 
                 onPress={handleSave}
                 disabled={isSaving}
               >

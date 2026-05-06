@@ -13,6 +13,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDashboardStats } from '../api/hook/useAdmin';
+import { useTheme } from '../context/ThemeContext';
 
 // --- Constants ---
 const COLORS = {
@@ -33,28 +34,32 @@ const API_BASE_URL = 'http://10.0.2.2:5000/api/v1';
 
 // --- Reusable Components ---
 
-const SectionHeader = ({title, rightLink, iconName}: {title: string, rightLink?: string, iconName?: string}) => (
-  <View style={styles.sectionHeaderContainer}>
-    <View style={styles.sectionHeaderLeft}>
-      {iconName && (
-        <MaterialCommunityIcons
-          name={iconName}
-          size={20}
-          color={COLORS.primaryBlue}
-          style={{marginRight: 8}}
-        />
+const SectionHeader = ({title, rightLink, iconName}: {title: string, rightLink?: string, iconName?: string}) => {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.sectionHeaderContainer}>
+      <View style={styles.sectionHeaderLeft}>
+        {iconName && (
+          <MaterialCommunityIcons
+            name={iconName}
+            size={20}
+            color={COLORS.primaryBlue}
+            style={{marginRight: 8}}
+          />
+        )}
+        <Text style={[styles.sectionHeaderTitle, { color: theme.text }]}>{title}</Text>
+      </View>
+      {rightLink && (
+        <TouchableOpacity>
+          <Text style={[styles.sectionHeaderLink, { color: COLORS.primaryBlue }]}>{rightLink}</Text>
+        </TouchableOpacity>
       )}
-      <Text style={styles.sectionHeaderTitle}>{title}</Text>
     </View>
-    {rightLink && (
-      <TouchableOpacity>
-        <Text style={styles.sectionHeaderLink}>{rightLink}</Text>
-      </TouchableOpacity>
-    )}
-  </View>
-);
+  );
+};
 
 const TrendIndicator = ({type, value}: {type: 'up' | 'down' | 'stable', value: string}) => {
+  const { theme } = useTheme();
   let iconName: any, color;
   switch (type) {
     case 'up':
@@ -67,7 +72,7 @@ const TrendIndicator = ({type, value}: {type: 'up' | 'down' | 'stable', value: s
       break;
     default:
       iconName = 'minus';
-      color = COLORS.textGray;
+      color = theme.textSecondary;
   }
 
   return (
@@ -79,11 +84,12 @@ const TrendIndicator = ({type, value}: {type: 'up' | 'down' | 'stable', value: s
 };
 
 const StatCard = ({title, value, iconName, iconLib, trendType, trendValue}: any) => {
+  const { theme } = useTheme();
   const IconComponent = iconLib === 'Feather' ? Feather : MaterialCommunityIcons;
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: theme.card }]}>
       <View style={styles.statCardHeader}>
-        <Text style={styles.cardTitle}>{title}</Text>
+        <Text style={[styles.cardTitle, { color: theme.textSecondary }]}>{title}</Text>
         <IconComponent
           name={iconName}
           size={20}
@@ -91,53 +97,62 @@ const StatCard = ({title, value, iconName, iconLib, trendType, trendValue}: any)
           style={{opacity: 0.7}}
         />
       </View>
-      <Text style={styles.statCardValue}>{value}</Text>
+      <Text style={[styles.statCardValue, { color: theme.text }]}>{value}</Text>
       <TrendIndicator type={trendType} value={trendValue} />
     </View>
   );
 };
 
-const ProgressBar = ({percentage, color}: {percentage: number, color: string}) => (
-  <View style={styles.progressBarBackground}>
-    <View
-      style={[
-        styles.progressBarFill,
-        {width: `${percentage}%`, backgroundColor: color},
-      ]}
-    />
-  </View>
-);
+const ProgressBar = ({percentage, color}: {percentage: number, color: string}) => {
+  const { theme } = useTheme();
+  return (
+    <View style={[styles.progressBarBackground, { backgroundColor: theme.isDark ? '#333' : '#F3F4F6' }]}>
+      <View
+        style={[
+          styles.progressBarFill,
+          {width: `${percentage}%`, backgroundColor: color},
+        ]}
+      />
+    </View>
+  );
+};
 
-const ProjectHealthItem = ({title, percentage, status, color}: any) => (
-  <View style={styles.card}>
-    <View style={styles.healthItemHeader}>
-      <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8}}>
-        <View style={[styles.healthDot, {backgroundColor: color}]} />
-        <Text style={styles.healthTitle} numberOfLines={1}>{title}</Text>
+const ProjectHealthItem = ({title, percentage, status, color}: any) => {
+  const { theme } = useTheme();
+  return (
+    <View style={[styles.card, { backgroundColor: theme.card }]}>
+      <View style={styles.healthItemHeader}>
+        <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8}}>
+          <View style={[styles.healthDot, {backgroundColor: color}]} />
+          <Text style={[styles.healthTitle, { color: theme.text }]} numberOfLines={1}>{title}</Text>
+        </View>
+        <Text style={[styles.healthPercentage, { color: theme.text }]}>{percentage}%</Text>
       </View>
-      <Text style={styles.healthPercentage}>{percentage}%</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flex: 1, marginRight: 12}}>
+          <ProgressBar percentage={percentage} color={color} />
+        </View>
+        <View style={[styles.statusBadge, {backgroundColor: color + '20'}]}>
+          <Text style={[styles.statusText, {color: color}]}>{status}</Text>
+        </View>
+      </View>
     </View>
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <View style={{flex: 1, marginRight: 12}}>
-        <ProgressBar percentage={percentage} color={color} />
-      </View>
-      <View style={[styles.statusBadge, {backgroundColor: color + '20'}]}>
-        <Text style={[styles.statusText, {color: color}]}>{status}</Text>
-      </View>
-    </View>
-  </View>
-);
+  );
+};
 
-const ActivityItem = ({icon, iconBg, content}: any) => (
-  <View style={styles.card}>
-    <View style={styles.activityContainer}>
-      <View style={[styles.activityIconContainer, {backgroundColor: iconBg}]}>
-        {icon}
+const ActivityItem = ({icon, iconBg, content}: any) => {
+  const { theme } = useTheme();
+  return (
+    <View style={[styles.card, { backgroundColor: theme.card }]}>
+      <View style={styles.activityContainer}>
+        <View style={[styles.activityIconContainer, {backgroundColor: iconBg}]}>
+          {icon}
+        </View>
+        <View style={styles.activityContent}>{content}</View>
       </View>
-      <View style={styles.activityContent}>{content}</View>
     </View>
-  </View>
-);
+  );
+};
 
 const Dashboard = () => {
   const { data: statsData, isLoading, isError, refetch } = useDashboardStats();
@@ -169,9 +184,10 @@ const Dashboard = () => {
   }
 
   if (isError) {
+    const { theme } = useTheme();
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }]}>
           <Text style={{ color: COLORS.dangerRed, fontFamily: 'serif' }}>Error loading dashboard stats.</Text>
           <TouchableOpacity onPress={() => refetch()} style={{ marginTop: 10 }}>
             <Text style={{ color: COLORS.primaryBlue, fontFamily: 'serif' }}>Retry</Text>
@@ -194,10 +210,11 @@ const Dashboard = () => {
   ];
   const maxChartValue = 70;
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      <View style={styles.container}>
+    const { theme, toggleTheme, isDarkMode } = useTheme();
+    return (
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.background} />
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -207,16 +224,24 @@ const Dashboard = () => {
         >
           {/* Header */}
           <View style={styles.headerContainer}>
-            <View style={{flex: 1, marginRight: 16}}>
-              <Text style={styles.headerTitle}>Boss Portal</Text>
-              <Text style={styles.headerSubtitle}>{new Date().toDateString()}</Text>
-            </View>
+            <TouchableOpacity onPress={toggleTheme} style={{flex: 1, marginRight: 16}}>
+              <Text style={[styles.headerTitle, { color: theme.text }]}>Boss Portal</Text>
+              <Text style={[styles.headerSubtitle, { color: theme.textSecondary }]}>{new Date().toDateString()}</Text>
+            </TouchableOpacity>
             <View style={styles.headerIcons}>
+              <TouchableOpacity style={[styles.iconButton, { backgroundColor: theme.isDark ? '#333' : '#F3F4F6', padding: 8, borderRadius: 12, marginLeft: 0 }]}>
+                <Ionicons
+                  name={isDarkMode ? "sunny" : "moon"}
+                  size={20}
+                  color={theme.text}
+                  onPress={toggleTheme}
+                />
+              </TouchableOpacity>
               <TouchableOpacity style={styles.iconButton}>
                 <Ionicons
                   name="notifications-outline"
                   size={24}
-                  color={COLORS.textDark}
+                  color={theme.text}
                 />
                 <View style={styles.notificationDot} />
               </TouchableOpacity>
@@ -262,31 +287,31 @@ const Dashboard = () => {
           />
 
           {/* Weekly Progress Chart Card */}
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: theme.card }]}>
             <View style={styles.chartHeader}>
               <View style={{flex: 1, marginRight: 12}}>
-                <Text style={styles.cardTitleBold} numberOfLines={1}>Weekly Progress</Text>
-                <Text style={styles.cardSubtitle} numberOfLines={1}>Tasks completed per day</Text>
+                <Text style={[styles.cardTitleBold, { color: theme.text }]} numberOfLines={1}>Weekly Progress</Text>
+                <Text style={[styles.cardSubtitle, { color: theme.textSecondary }]} numberOfLines={1}>Tasks completed per day</Text>
               </View>
-              <View style={styles.toggleContainer}>
+              <View style={[styles.toggleContainer, { backgroundColor: theme.isDark ? '#333' : '#F3F4F6' }]}>
                 <TouchableOpacity
-                  style={chartPeriod === 'Weekly' ? styles.toggleActive : styles.toggleInactive}
+                  style={chartPeriod === 'Weekly' ? [styles.toggleActive, { backgroundColor: theme.card }] : styles.toggleInactive}
                   onPress={() => setChartPeriod('Weekly')}
                 >
-                  <Text style={chartPeriod === 'Weekly' ? styles.toggleTextActive : styles.toggleTextInactive}>Weekly</Text>
+                  <Text style={chartPeriod === 'Weekly' ? [styles.toggleTextActive, { color: COLORS.primaryBlue }] : [styles.toggleTextInactive, { color: theme.textSecondary }]}>Weekly</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={chartPeriod === 'Monthly' ? styles.toggleActive : styles.toggleInactive}
+                  style={chartPeriod === 'Monthly' ? [styles.toggleActive, { backgroundColor: theme.card }] : styles.toggleInactive}
                   onPress={() => setChartPeriod('Monthly')}
                 >
-                  <Text style={chartPeriod === 'Monthly' ? styles.toggleTextActive : styles.toggleTextInactive}>Monthly</Text>
+                  <Text style={chartPeriod === 'Monthly' ? [styles.toggleTextActive, { color: COLORS.primaryBlue }] : [styles.toggleTextInactive, { color: theme.textSecondary }]}>Monthly</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
-              <Text style={styles.chartTotalValue}>452</Text>
-              <Text style={styles.chartTotalLabel}>Tasks</Text>
+              <Text style={[styles.chartTotalValue, { color: theme.text }]}>452</Text>
+              <Text style={[styles.chartTotalLabel, { color: theme.textSecondary }]}>Tasks</Text>
             </View>
 
             <View style={styles.chartContainer}>
@@ -299,11 +324,11 @@ const Dashboard = () => {
                         height: (item.value / maxChartValue) * 100,
                         backgroundColor: item.active
                           ? COLORS.primaryBlue
-                          : COLORS.chartLightBlue,
+                          : theme.isDark ? '#444' : COLORS.chartLightBlue,
                       },
                     ]}
                   />
-                  <Text style={styles.chartLabel}>{item.day}</Text>
+                  <Text style={[styles.chartLabel, { color: theme.textSecondary }]}>{item.day}</Text>
                 </View>
               ))}
             </View>
@@ -370,14 +395,14 @@ const Dashboard = () => {
               }
               content={
                 <View>
-                  <Text style={styles.activityText}>{activity.content}</Text>
-                  <Text style={styles.activityTime}>{new Date(activity.time).toLocaleString()}</Text>
+                  <Text style={[styles.activityText, { color: theme.text }]}>{activity.content}</Text>
+                  <Text style={[styles.activityTime, { color: theme.textSecondary }]}>{new Date(activity.time).toLocaleString()}</Text>
                 </View>
               }
             />
           ))}
           {stats.recentActivities.length === 0 && (
-            <Text style={{ textAlign: 'center', color: COLORS.textGray, marginTop: 20, fontFamily: 'serif' }}>No recent activities</Text>
+            <Text style={{ textAlign: 'center', color: theme.textSecondary, marginTop: 20, fontFamily: 'serif' }}>No recent activities</Text>
           )}
         </ScrollView>
       </View>
