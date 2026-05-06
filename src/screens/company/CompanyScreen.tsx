@@ -242,12 +242,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   headerSubtitle: {
     fontSize: 12,
     fontWeight: '600',
     color: COLORS.textGray,
     letterSpacing: 0.5,
+    fontFamily: 'serif',
   },
   // Search Bar Styles
   searchBar: {
@@ -266,6 +268,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   // Filter Styles
   filterContainer: {
@@ -289,6 +292,7 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: 'serif',
   },
   activeFilterText: {
     color: '#FFFFFF',
@@ -330,18 +334,21 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.5,
+    fontFamily: 'serif',
   },
   cardTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.textDark,
     marginBottom: 8,
+    fontFamily: 'serif',
   },
   cardDescription: {
     fontSize: 15,
     color: COLORS.textGray,
     lineHeight: 22,
     marginBottom: 20,
+    fontFamily: 'serif',
   },
   cardFooter: {
     flexDirection: 'row',
@@ -368,6 +375,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: 'serif',
   },
   viewButton: {
     flexDirection: 'row',
@@ -378,6 +386,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.primary,
     marginRight: 4,
+    fontFamily: 'serif',
   },
   infoRow: {
     flexDirection: 'row',
@@ -388,6 +397,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: COLORS.textGray,
     fontWeight: '500',
+    fontFamily: 'serif',
   },
   emptyContainer: {
     alignItems: 'center',
@@ -399,6 +409,7 @@ const styles = StyleSheet.create({
     color: COLORS.textGray,
     fontWeight: '600',
     marginTop: 12,
+    fontFamily: 'serif',
   },
 });
 

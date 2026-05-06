@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   scrollContainer: {
     paddingBottom: 40,
@@ -247,17 +248,20 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+    fontFamily: 'serif',
   },
   heroAmount: {
     fontSize: 40,
     fontWeight: '800',
     color: COLORS.textDark,
     marginBottom: 4,
+    fontFamily: 'serif',
   },
   heroDate: {
     fontSize: 14,
     color: COLORS.textGray,
     marginBottom: 24,
+    fontFamily: 'serif',
   },
   transactionChip: {
     backgroundColor: COLORS.surface,
@@ -269,7 +273,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.textDark,
     fontWeight: '600',
-    fontFamily: 'monospace',
+    fontFamily: 'serif',
   },
   fullDivider: {
     height: 8,
@@ -294,16 +298,19 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 8,
+    fontFamily: 'serif',
   },
   entryValueMain: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   entrySubText: {
     fontSize: 12,
     color: COLORS.textGray,
     marginTop: 2,
+    fontFamily: 'serif',
   },
   planSection: {
     flexDirection: 'row',
@@ -329,11 +336,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   planDuration: {
     fontSize: 12,
     color: COLORS.textGray,
     marginTop: 2,
+    fontFamily: 'serif',
   },
   planPriceBox: {
     alignItems: 'flex-end',
@@ -342,6 +351,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: COLORS.primary,
+    fontFamily: 'serif',
   },
   subDetailsSection: {
     marginBottom: 32,
@@ -365,11 +375,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: COLORS.textGray,
     marginBottom: 2,
+    fontFamily: 'serif',
   },
   infoValue: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   priceTable: {
     backgroundColor: COLORS.surface,
@@ -384,11 +396,13 @@ const styles = StyleSheet.create({
   priceLabel: {
     fontSize: 14,
     color: COLORS.textGray,
+    fontFamily: 'serif',
   },
   priceValue: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   totalDivider: {
     height: 1,
@@ -399,11 +413,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   totalValueText: {
     fontSize: 20,
     fontWeight: '800',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   noteSection: {
     flexDirection: 'row',
@@ -417,6 +433,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginLeft: 8,
     flex: 1,
+    fontFamily: 'serif',
   },
   footer: {
     paddingHorizontal: 24,
@@ -436,6 +453,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '700',
+    fontFamily: 'serif',
   },
   secondaryButton: {
     height: 56,
@@ -451,6 +469,7 @@ const styles = StyleSheet.create({
     color: COLORS.textDark,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'serif',
   },
 });
 

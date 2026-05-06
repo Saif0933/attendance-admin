@@ -367,11 +367,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   headerSubtitle: {
     fontSize: 14,
     color: COLORS.textGray,
     marginTop: 2,
+    fontFamily: 'serif',
   },
   filterButton: {
     padding: 10,
@@ -399,6 +401,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   listContent: {
     paddingHorizontal: 20,
@@ -441,11 +444,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.textDark,
     flex: 1,
+    fontFamily: 'serif',
   },
   cardSubtitle: {
     fontSize: 14,
     color: COLORS.textGray,
     lineHeight: 20,
+    fontFamily: 'serif',
   },
   statusBadge: {
     flexDirection: 'row',
@@ -463,6 +468,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: 'serif',
   },
   expirySection: {
     marginBottom: 20,
@@ -478,11 +484,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.textGray,
     marginBottom: 4,
+    fontFamily: 'serif',
   },
   detailValue: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   detailsButton: {
     flexDirection: 'row',
@@ -497,6 +505,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.primary,
+    fontFamily: 'serif',
   },
   emptyContainer: {
     alignItems: 'center',
@@ -507,6 +516,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.textGray,
     marginTop: 10,
+    fontFamily: 'serif',
   },
   // Modal Styles
   modalOverlay: {
@@ -532,6 +542,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.textDark,
+    fontFamily: 'serif',
   },
   modalForm: {
     padding: 24,
@@ -545,6 +556,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.textDark,
     marginBottom: 8,
+    fontFamily: 'serif',
   },
   modalInput: {
     backgroundColor: COLORS.background,
@@ -554,6 +566,7 @@ const styles = StyleSheet.create({
     color: COLORS.textDark,
     borderWidth: 1,
     borderColor: COLORS.border,
+    fontFamily: 'serif',
   },
   textArea: {
     height: 100,
@@ -584,6 +597,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '700',
+    fontFamily: 'serif',
   },
 });
 

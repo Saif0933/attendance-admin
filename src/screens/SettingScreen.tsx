@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 0.5,
+    fontFamily: 'serif',
   },
   headerAction: {
     width: 40,
@@ -265,6 +266,7 @@ const styles = StyleSheet.create({
     fontSize: 44,
     fontWeight: '800',
     color: '#4F46E5',
+    fontFamily: 'serif',
   },
   activeStatus: {
     position: 'absolute',
@@ -282,6 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#111827',
     marginBottom: 4,
+    fontFamily: 'serif',
   },
   roleBadge: {
     flexDirection: 'row',
@@ -297,6 +300,7 @@ const styles = StyleSheet.create({
     color: '#6366F1',
     fontWeight: '600',
     marginLeft: 6,
+    fontFamily: 'serif',
   },
   metricsBar: {
     flexDirection: 'row',
@@ -318,6 +322,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#1F2937',
+    fontFamily: 'serif',
   },
   metricLabel: {
     fontSize: 11,
@@ -325,6 +330,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontWeight: '500',
     textTransform: 'uppercase',
+    fontFamily: 'serif',
   },
   sectionDivider: {
     marginTop: 28,
@@ -337,6 +343,7 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
+    fontFamily: 'serif',
   },
   actionCard: {
     backgroundColor: '#FFFFFF',
@@ -369,11 +376,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     color: '#111827',
+    fontFamily: 'serif',
   },
   actionSubTitle: {
     fontSize: 13,
     color: '#9CA3AF',
     marginTop: 2,
+    fontFamily: 'serif',
   },
   footer: {
     marginTop: 'auto',
@@ -398,11 +407,13 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#374151',
     letterSpacing: 2,
+    fontFamily: 'serif',
   },
   legalLabel: {
     fontSize: 11,
     color: '#D1D5DB',
     fontWeight: '500',
+    fontFamily: 'serif',
   },
 });
 

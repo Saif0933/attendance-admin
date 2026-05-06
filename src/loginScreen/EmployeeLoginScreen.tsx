@@ -187,12 +187,14 @@ const styles = StyleSheet.create({
     color: '#111',
     marginBottom: 8,
     letterSpacing: -0.5,
+    fontFamily: 'serif',
   },
   brandSubtitle: {
     fontSize: 15,
     color: '#5F738C',
     textAlign: 'center',
     fontWeight: '400',
+    fontFamily: 'serif',
   },
   inputContainer: {
     marginBottom: 30,
@@ -202,6 +204,7 @@ const styles = StyleSheet.create({
     color: '#111',
     fontWeight: '500',
     marginBottom: 10,
+    fontFamily: 'serif',
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#111',
     height: '100%',
+    fontFamily: 'serif',
   },
   inputIcon: {
     padding: 5,
@@ -242,6 +246,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
     fontWeight: '600',
+    fontFamily: 'serif',
   },
   footer: {
     alignItems: 'center',
@@ -250,6 +255,7 @@ const styles = StyleSheet.create({
     color: '#2995C0',
     fontWeight: '600',
     fontSize: 14,
+    fontFamily: 'serif',
   },
   inputError: {
     borderColor: '#E53E3E',
@@ -259,6 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 10,
     textAlign: 'center',
+    fontFamily: 'serif',
   },
   signInButtonDisabled: {
     opacity: 0.7,
